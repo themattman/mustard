@@ -3,6 +3,8 @@ var email   = require('./email.js')
   , sha1    = require('sha1')
   , io      = require('./app.js');
 
+var rooms = {};
+
 // main page
 exports.splash = function(req, res){
   res.render('splash');
@@ -13,10 +15,12 @@ exports.room = function(req, res) {
   io.io.sockets.on('connection', function(socket){
     socket.join(req.params.id);
     console.log('SOCKET CONNECTED'.green);
+    rooms[req.params.id] = [];
 
     socket.on('enter_text', function(change){
+      rooms[req.params.id].push(change);
+      console.log(rooms);
       console.log('change'.magenta);
-      console.log(change);
       socket.broadcast.to(req.params.id).emit('update', change);
     });
 
