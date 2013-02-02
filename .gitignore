@@ -12,3 +12,10 @@ logs
 results
 
 npm-debug.log
+
+/node_modules
+Procfile
+.gitignore
+
+.DS_Store
+
