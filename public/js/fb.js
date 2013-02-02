@@ -29,17 +29,17 @@ window.fbAsyncInit = function() {
   if (response.status === 'connected') {
     // user is good to go
     setUserInfo(FB, response);
-    $("#note").show();
+    $("#noteformform").show();
     $("#login").hide();
 
   } else if (response.status === 'not_authorized') {
     // the user is logged in to Facebook, 
     // but has not authenticated your app
-    $("#note").hide();
+    $("#noteform").hide();
     $("#login").show();
   } else {
     // the user isn't logged in to Facebook.
-    $("#note").hide();
+    $("#noteform").hide();
     $("#login").show();
   }
  });
@@ -51,11 +51,11 @@ function fbLogin(FB) {
      if (response.authResponse) {
         // logged in
         setUserInfo(FB, response);
-        $("#note").show();
+        $("#noteform").show();
         $("#login").hide();
 
      } else {
-        $("#note").hide();
+        $("#noteform").hide();
         $("#login").show();
      }
    });

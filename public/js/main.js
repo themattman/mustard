@@ -23,23 +23,23 @@ $(function(){
       var notes = doc.at('notes').get();
       console.log(notes)
       for(var i in notes) {
-        $("#notes").append(template(notes[i]))
+        $("#notes-list").append(template(notes[i]))
       }
     }
 
     var notes = doc.at('notes')
     notes.on('insert', function (pos, item) {
-      $("#notes").append(template(item))
+      $("#notes-list").append(template(item))
       console.log(item);
     });
 
-    $('#note').submit(function(e){
+    $('#noteform').submit(function(e){
       e.preventDefault();
       var obj = {
           text:$("#text").val()
       }
       notes.push(obj);
-      $("#notes").append(template(obj))
+      $("#notes-list").append(template(obj))
       $("#text").val("")
     });
 

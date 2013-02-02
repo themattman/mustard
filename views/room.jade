@@ -1,17 +1,23 @@
 extends layout
 
 block append header
-	#status.label
+	button.btn.btn-info#login.pull-right.hide Login with FB to Join
 block append content
 	.container
-		.header: h2 Mustard
-		ul#notes.unstyled
-		.footer
-	.bottom
-		form#note.hide
-			input#text(type="text", autofocus)
-		.center
-			button.btn.btn-info#login.hide login to fb to join
+		#title
+			h1 mustard
+			p take notes with your friends
+		section#notes
+			header
+			ul#notes-list.unstyled
+				form#noteform
+					input.note#text(placeholder='Add a new note', autofocus="", autocomplete="off")
+			
+			footer
+				#status.label
+
+
+	
 	
 
 
