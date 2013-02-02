@@ -17,7 +17,7 @@ exports.room = function(req, res) {
     socket.on('enter_text', function(change){
       console.log('change'.magenta);
       console.log(change);
-      io.io.sockets.in(req.params.id).emit('update', change);
+      socket.broadcast.to(req.params.id).emit('update', change);
     });
 
     socket.on('disconnect', function(a){
