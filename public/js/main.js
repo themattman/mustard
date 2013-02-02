@@ -7,22 +7,40 @@ $(function(){
   console.log("Editing session", doc);
 
   if (doc == "" || doc == "#") window.location = "/"
-
-  var elem = document.getElementById('json');
   
-  var connection = sharejs.open('blag', 'text', function(error, doc) {
+  // *** Trains
+  var connection = sharejs.open(doc, 'json', function(error, doc) {
     if (error) {
-      console.log(error);
-    } else {
-      elem.disabled = false;
-      doc.attach_textarea(elem);
+      if (console) {
+        console.error(error);
+      }
+      return;
     }
+    
+    if (doc.created) {
+      doc.set(["Thomas the Tank Engine",
+        "Edward the Blue Engine",
+        "Henry the Green Engine",
+        "Gordon the Big Engine",
+        "James the Red Engine",
+        "Percy the Small Engine",
+        "The Fat Controller"
+      ]);
+    }
+    
+    var trains = doc.get();
+    $.each(trains, function(i, train) {
+      $('#trains').append($('<li>').text(trains[i])); //.attr('data-id', i)
+    });
+
+    
+    
   });
 
-  /*var status = document.getElementById('status');
+  var status = document.getElementById('status');
   var register = function(state, klass, text) {
     connection.on(state, function() {
-      status.className = 'label ' + klass;
+      status.className = 'label ' + 'label-'+klass;
       status.innerHTML = text;
     });
   };
@@ -30,7 +48,9 @@ $(function(){
   register('ok', 'success', 'Online');
   register('connecting', 'warning', 'Connecting...');
   register('disconnected', 'important', 'Offline');
-  register('stopped', 'important', 'Error');*/
+  register('stopped', 'important', 'Error');
+
+
 
   $('#addFriend').click(function() {
     var email = prompt('Add your friend!');
