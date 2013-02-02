@@ -1,13 +1,23 @@
-@gutter: #2f3129;
-@main: #272822;
-@node: #8cc84b;
+@gutter: #d0a056;
+@lines: #9b9b43;
+@back: #f2e683;
 @bmw: #0088ce;
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
-  background: /*url("/img/use_your_illusion.png")*/ @main;
-  color: white;
+  background: gray;
+}
+
+.header {
+  margin-top: 60px;
+  border-bottom: 2px @lines solid;
+  padding-left: 40px;
+}
+
+.footer {
+  margin-bottom: 30px;
+  margin-left: 80px;
 }
 
 #title {
@@ -15,20 +25,17 @@ body {
   margin-top: 0px;
 }
 
-.highlight {
-  background-color: @node;
+.container {
+  background: @back;
 }
 
 .center {
   text-align: center;
-  padding-top: 10px;
-  height: 0px;
-  margin-bottom: -10px;
 }
 
 #disconnect_notifier {
   background: black;
-  border-bottom: 2px @node solid;
+  border-bottom: 2px @bmw solid;
   display: none;
   margin: 0 auto;
   padding: 10px 30px;
@@ -39,10 +46,14 @@ body {
   margin-bottom: -40px;
 }
 
+#notes li {
+  padding-left: 40px;
+  border-bottom: 2px solid @lines;
+  margin-top: 5px;
+}
 
-
-#note {
-  width: 91%;
+.bottom {
+    width: 91%;
   bottom: 0px;
   margin: 2%;
   padding: 2%;

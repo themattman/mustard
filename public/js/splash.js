@@ -4,7 +4,7 @@ $('#start').submit(function(e){
 	var doc = '';
 	if($('#doc').val()) {
 		doc = $('#doc').val();
-
+		
 		// check if namespace is available!
 		window.location = "./room/"+doc;
 	} else {

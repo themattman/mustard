@@ -4,10 +4,14 @@ block append header
 	#status.label
 block append content
 	.container
+		.header: h2 Mustard
 		ul#notes.unstyled
-
-	form#note
-		input#text(type="text", autofocus)
+		.footer
+	.bottom
+		form#note.hide
+			input#text(type="text", autofocus)
+		.center
+			button.btn.btn-info#login.hide login to fb to join
 	
 
 

@@ -19,19 +19,58 @@ window.fbAsyncInit = function() {
     xfbml      : true  // parse XFBML tags on this page?
   });
 
-  console.log('authd');
+  $("#login").click(function() {
+    fbLogin(FB);
+  });
 
-  FB.login(function(response) {
-   if (response.authResponse) {
-     console.log('Welcome!  Fetching your information.... ');
-     FB.api('/me', function(response) {
-       console.log(response);
-       console.log('https://graph.facebook.com/' + response.username + '/picture?type=large')
-       console.log('Good to see you, ' + response.name + '.');
-     });
-   } else {
-     console.log('User cancelled login or did not fully authorize.');
-   }
+  
+
+  FB.getLoginStatus(function(response) {
+  if (response.status === 'connected') {
+    // user is good to go
+    setUserInfo(FB, response);
+    $("#note").show();
+    $("#login").hide();
+
+  } else if (response.status === 'not_authorized') {
+    // the user is logged in to Facebook, 
+    // but has not authenticated your app
+    $("#note").hide();
+    $("#login").show();
+  } else {
+    // the user isn't logged in to Facebook.
+    $("#note").hide();
+    $("#login").show();
+  }
  });
 
+}
+
+function fbLogin(FB) {
+    FB.login(function(response) {
+     if (response.authResponse) {
+        // logged in
+        setUserInfo(FB, response);
+        $("#note").show();
+        $("#login").hide();
+
+     } else {
+        $("#note").hide();
+        $("#login").show();
+     }
+   });
+  };
+
+
+function setUserInfo(FB, response) {
+
+  var uid = response.authResponse.userID;
+  var accessToken = response.authResponse.accessToken;
+
+  console.log(accessToken)
+  FB.api('/me', function(response) {
+
+   console.log('https://graph.facebook.com/' + response.username + '/picture?type=large')
+   console.log('Good to see you, ' + response.name + '.');
+  });
 }
