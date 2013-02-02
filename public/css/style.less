@@ -1,11 +1,11 @@
 @gutter: red;
-@lines: rgba(210,230,255,0.7);
+@lines: rgb(210,230,255);
 @back: #f2e683;
 @top: #733D1A;
 
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: 'Open Sans';
+   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   -ms-font-smoothing: antialiased;
   -o-font-smoothing: antialiased;
@@ -18,6 +18,16 @@ body {
   margin: 2%;
   padding: 2%;
   position:absolute;
+}
+
+h1, h2, h3, h4, h5, h6, button, input {
+  font-family: 'Open Sans';
+}
+
+.header {
+  margin-top: 60px;
+  border-bottom: 2px @lines solid;
+  padding-left: 40px;
 }
 
 // splash pages 

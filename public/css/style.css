@@ -1,5 +1,5 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans';
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   -ms-font-smoothing: antialiased;
@@ -12,6 +12,21 @@ body {
   margin: 2%;
   padding: 2%;
   position: absolute;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+input {
+  font-family: 'Open Sans';
+}
+.header {
+  margin-top: 60px;
+  border-bottom: 2px #d2e6ff solid;
+  padding-left: 40px;
 }
 #splash {
   margin-top: 80px;
@@ -133,7 +148,7 @@ header:before {
   box-shadow: none;
 }
 #notes-list li {
-  border-top: 1px rgba(210, 230, 255, 0.7) solid;
+  border-top: 1px #d2e6ff solid;
 }
 #notes-list li:first-child {
   border-top: none;
