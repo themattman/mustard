@@ -3,10 +3,11 @@ extends layout
 block append header
 	#status.label
 block append content
-	ul#notes.unstyled
+	.container
+		ul#notes.unstyled
 
 	form#note
-		input#text(type="text")
+		input#text(type="text", autofocus)
 	
 
 
