@@ -69,6 +69,9 @@ function setUserInfo(FB, response) {
 
   console.log(accessToken)
   FB.api('/me', function(response) {
+    console.log(response)
+    $(".fbName").html(response.name);
+    //$(".fbPic").attr("src", "https://graph.facebook.com/"+response.username+"/picture");
 
    console.log('https://graph.facebook.com/' + response.username + '/picture?type=large')
    console.log('Good to see you, ' + response.name + '.');
