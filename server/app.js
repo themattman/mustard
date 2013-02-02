@@ -6,7 +6,18 @@ var express   = require('express')
   , config    = require('./config.js')
   , http      = require('http')
   //, share 	  = require('share').server
-  , io        = require('socket.io');
+  , io        = require('socket.io')
+  , events    = require('events');
+
+// Synchro here
+var graphUpdateSignal = function(){};
+graphUpdateSignal.prototype = new events.EventEmitter;
+graphUpdateSignal.prototype.updateAll = function() {
+  console.log('.emit'.red);
+  this.emit('');
+};
+var graphUpdater = new graphUpdateSignal();
+
 
 // setup here
 config(app);
@@ -25,8 +36,5 @@ app.post('/email',  router.email );
 
 var documents = [];
 
-var io = require('socket.io').listen(httpApp).set('log level', 1);
-
-io.sockets.on('connection', function(socket){
-  console.log('SOCKET CONNECTED'.green);
-});
+exports.io = require('socket.io').listen(httpApp).set('log level', 1);
+//exports.httpApp = httpApp;

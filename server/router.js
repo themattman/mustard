@@ -1,6 +1,7 @@
 var email   = require('./email.js')
   , fs      = require('fs')
-  , sha1    = require('sha1');
+  , sha1    = require('sha1')
+  , io      = require('./app.js');
 
 // main page
 exports.splash = function(req, res){
@@ -9,6 +10,22 @@ exports.splash = function(req, res){
 
 exports.room = function(req, res) {
 	console.log(req.params.id);
+  io.io.sockets.on('connection', function(socket){
+    socket.join(req.params.id);
+    console.log('SOCKET CONNECTED'.green);
+
+    socket.on('enter_text', function(change){
+      console.log('change'.magenta);
+      console.log(change);
+      io.io.sockets.in(req.params.id).emit('update', change);
+    });
+
+    socket.on('disconnect', function(a){
+      console.log('left'.red);
+      socket.leave(req.params.id);
+    });
+
+  });
 	res.render('room');
 }
  
