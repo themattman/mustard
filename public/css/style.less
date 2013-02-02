@@ -8,6 +8,7 @@ body {
   overflow: hidden;
   background: /*url("/img/use_your_illusion.png")*/ @main;
   color: white;
+  height:100%;
 }
 
 #header {
@@ -31,30 +32,6 @@ body {
     right: 0;
     bottom: 40px;
     left: 0;
-}
-
-#tokboxes {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    z-index: 1001;
-    height: 100%;
-    overflow: auto;
-}
-
-.tokbox {
-    border: @gutter 2px solid;
-    margin: 10px;
-    z-index: 1000;
-}
-
-#youtokbox { 
-    position: absolute;
-    bottom: 0px;//40px;
-    right: 0px;
-    background-color: white;
-    border: @gutter 2px solid;
-    margin: 10px;
 }
 
 .highlight {
@@ -106,4 +83,11 @@ body {
 
 #start {
   margin-top: 80px;
+}
+#input_box {
+  width: 90%;
+  bottom: 20px;
+  margin-left:5%;
+  margin-right:5%;
+  position:absolute;
 }
