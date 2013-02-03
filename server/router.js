@@ -22,12 +22,14 @@ exports.email = function(req, res){
   });
 };
 
+var url_to_return = "";
 exports.grab = function(req, res){
   try{
     var scraper = new nodeio.Job({
       input: false,
       run: function (scraper, url) {
         console.log('url'.green, url);
+        url_to_return = url;
         this.getHtml(url, function(err, $) {
           if (err) {
             console.log(err);
@@ -37,6 +39,7 @@ exports.grab = function(req, res){
               if(typeof(req.redirect) != 'undefined'){
                 res(response);
               }else{
+                response.url = url_to_return;
                 res.json(response);
               }
             });
