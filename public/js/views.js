@@ -138,6 +138,7 @@ $(function() {
 		      			note.text = response.summary;
 		      		} else {
 		      			note.type = "link";
+		      			note.text = response.url;
 		      		}
 		      		console.log(note)
 		      	}
