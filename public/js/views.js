@@ -132,13 +132,14 @@ $(function() {
 		      		console.log(response)
 		      		note.title = response.title;
 		      		note.link = response.img_src;
+		      		note.url = response.url;
 		      		if(response.summary != undefined) {
 
 		      			note.type = "search";
 		      			note.text = response.summary;
 		      		} else {
 		      			note.type = "link";
-		      			note.text = response.url;
+		      			note.text = "";
 		      		}
 		      		console.log(note)
 		      	}

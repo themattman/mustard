@@ -14,13 +14,11 @@ script#note-temp(type="template")
 					img(src!="<%= link %>")
 				<% } %>
 				.span9
-					<% if(type == "search" || type == "pic") { %>
-					.title <%= title %>
+					
+					a(href!="<%= url %>", target="_blank") <%= title %>
 					.caption
 						<%= text %>
-					<% } else { %>
-					a(href!="<%= text %>", target="_blank") <%= title %>
-					<% } %>
+					
 			<% } else { %>
 			<%= text %>
 			<% } %> 
