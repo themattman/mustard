@@ -4,7 +4,7 @@ script#note-temp(type="template")
 		//-.pull-left.inline.user
 			.delete &times;
 		.pull-right.inline.user
-			span <%= name %> 
+			span <%= escape(name) %> 
 			img.fbPic(src!="https://graph.facebook.com/<%= user %>/picture?type=square")
 		.note <%= text %>
 		

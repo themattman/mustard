@@ -72,6 +72,7 @@ $(function() {
 					$("#notes-list").empty();
 				} else {
 					var notes = doc.at('notes').get();
+					$("#notes-list").empty();
 					for(var i in notes) {
 						that.addNote(notes[i]);
 					}
@@ -114,7 +115,7 @@ $(function() {
 			e.preventDefault();
 			var note = {
 				type: "note",
-				text: $("#text").val()
+				text: escape($("#text").val())
 			}
 			note.user = fb.user;
 			note.name = fb.name;
