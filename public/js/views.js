@@ -197,7 +197,8 @@ $(function() {
 	            var note = {
 					type: "pic",
 					title: $("#text").val(),
-					link: link+".jpeg"
+					link: link+".jpeg",
+					url: link
 				}
 				note.user = fb.user;
 				note.name = fb.name;
