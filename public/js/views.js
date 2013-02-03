@@ -27,7 +27,7 @@ $(function() {
 			window.location = "https://www.facebook.com/" + this.model.get('user');
 		},
 		transform: function() {
-			if(!window.fb || this.model.get('type') == "pic") return;
+			if(!window.fb || this.model.get('type') != "note") return;
 			if(!$(".note", this.el).is("input")) {
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
 				$(".note", this.el).parent().addClass("highlite")
@@ -125,12 +125,26 @@ $(function() {
 			note.user = fb.user;
 			note.name = fb.name;
 			note.pos = window.notes.getLength(); // get max pos ***?
-			this.addNote(note);
-			window.notes.push(note);
 
-			/*$.post('/scrape', {url: $('#text').val()}, function(response){
-		      console.log(response.img_src)
-		    });*/
+			var that = this;
+			$.post('/scrape', {url: $('#text').val()}, function(response){
+				if(response != "undefined") {
+		      		console.log(response)
+		      		note.title = response.title;
+		      		note.link = response.img_src;
+		      		if(response.summary != undefined) {
+
+		      			note.type = "search";
+		      			note.text = response.summary;
+		      		} else {
+		      			note.type = "link";
+		      		}
+		      		console.log(note)
+		      	}
+		      	console.log(note.type)
+		      	that.addNote(note);
+				window.notes.push(note);
+		    });
 
 			$("#text").val("")
 		},
@@ -141,11 +155,10 @@ $(function() {
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
       		this.model.add(newNote);
-      		$("#notes-list").scrollTop(this.model.length * 66);
+      		$("#notes-list").scrollTop(this.model.length * 250);
 		},
 		render: function() {
 			$("#notes-list").empty();
-			console.log('rendering')
 	        for (var i = 0; i < this.model.models.length; i++) {
 	            var view = new NoteView({model: this.model.models[i]});
 	            $("#notes-list").append( view.render().el );
@@ -182,7 +195,7 @@ $(function() {
 	            console.log(link);
 	            var note = {
 					type: "pic",
-					text: $("#text").val(),
+					title: $("#text").val(),
 					link: link+".jpeg"
 				}
 				note.user = fb.user;
