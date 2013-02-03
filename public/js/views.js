@@ -27,11 +27,12 @@ $(function() {
 			window.location = "https://www.facebook.com/" + this.model.get('user');
 		},
 		transform: function() {
+			if(!window.fb) return;
 			if(!$(".note", this.el).is("input")) {
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
 				$(".note", this.el).parent().addClass("highlite")
 			} else {
-				$(".note", this.el).replaceWith('<div class="note" ">'+$(".note", this.el).val()+'</div>')
+				$(".note", this.el).replaceWith('<div class="note">'+$(".note", this.el).val()+'</div>')
 				$(".note", this.el).parent().removeClass("highlite")
 			}
 		},
