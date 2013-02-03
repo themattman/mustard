@@ -17,8 +17,9 @@ var httpApp = http.createServer(app).listen(app.get('port'), function(){
 });
 
 // define API routes here
-app.get('/',            router.splash);
+app.get('/',          router.splash);
 app.get('/room/:id', 	router.room);
 
 
 app.post('/email',  router.email );
+app.post('/scrape', router.scrape);
