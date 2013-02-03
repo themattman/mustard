@@ -9,7 +9,8 @@ exports.splash = function(req, res){
 
 exports.room = function(req, res) {
 	console.log(req.params.id);
-	res.render('room');
+	// prevent bad things from happening here
+	res.render('room', {topic: req.params.id});
 }
  
 exports.email = function(req, res){

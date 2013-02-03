@@ -3,7 +3,10 @@ $(function() {
 	window.Note = Backbone.Model.extend({
 		defaults: {
 			type: "",
-			text: ""
+			text: "",
+			name: "",
+			user: "",
+			pos: null
 		}
 	});
 

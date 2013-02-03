@@ -6,18 +6,6 @@ body {
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased;
 }
-.bottom {
-  width: 91%;
-  bottom: 0px;
-  margin: 2%;
-  padding: 2%;
-  position: absolute;
-}
-.header {
-  margin-top: 60px;
-  border-bottom: 2px #d2e6ff solid;
-  padding-left: 40px;
-}
 #splash {
   margin-top: 80px;
 }
@@ -29,7 +17,8 @@ body {
   -webkit-box-shadow: inset 0 3px 3px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 3px 3px rgba(0, 0, 0, 0.3);
 }
-button {
+button,
+textarea {
   margin: 0;
   padding: 0;
   border: 0;
@@ -42,6 +31,11 @@ button {
   -ms-appearance: none;
   -o-appearance: none;
   appearance: none;
+}
+textarea:focus {
+  border-style: none;
+  border-color: Transparent;
+  overflow: auto;
 }
 #noteform {
   margin-bottom: 0px;
@@ -59,6 +53,7 @@ button {
 #notes {
   background: #fff;
   background: rgba(255, 255, 255, 0.9);
+  background: url("/../img/textures/cream_dust.png");
   margin: 20px 0 40px 0;
   border: 1px solid #ccc;
   position: relative;
@@ -101,7 +96,9 @@ button {
   text-rendering: optimizeLegibility;
 }
 header {
-  height: 30px;
+  height: 60px;
+  padding-left: 60px;
+  margin-bottom: -10px;
   border-radius: inherit;
 }
 header:before {
@@ -110,15 +107,14 @@ header:before {
   top: 0;
   right: 0;
   left: 0;
-  height: 30px;
-  border-bottom: 1px solid gray;
-  background: #733d1a;
+  height: 60px;
+  border-bottom: 1px solid #d2e6ff;
 }
 .note,
 .edit {
   position: relative;
   margin: 0;
-  width: 100%;
+  width: 88%;
   font-size: 24px;
   font-family: inherit;
   line-height: 1.4em;
@@ -140,9 +136,17 @@ header:before {
 }
 .note {
   padding: 16px 16px 16px 60px;
-  background: rgba(0, 0, 0, 0.02);
+  background: none;
   z-index: 2;
   box-shadow: none;
+}
+.user {
+  height: 45px;
+  margin-bottom: -65px;
+  padding: 10px;
+}
+.user img {
+  height: 45px;
 }
 #main {
   position: relative;

@@ -64,12 +64,18 @@ function fbLogin(FB) {
 
 function setUserInfo(FB, response) {
 
-  var uid = response.authResponse.userID;
-  var accessToken = response.authResponse.accessToken;
+  window.fb = {
+      id: response.authResponse.userID,
+      token: response.authResponse.accessToken
+  };
 
-  console.log(accessToken)
+  console.log(fb.token)
   FB.api('/me', function(response) {
     console.log(response)
+    fb.name = response.name;
+    fb.user = response.username;
+
+    console.log(fb)
     $(".fbName").html(response.name);
     //$(".fbPic").attr("src", "https://graph.facebook.com/"+response.username+"/picture");
 

@@ -7,23 +7,27 @@ if (docId == "" || docId == "#") window.location = "/"
 $(function() {
 
 	window.NoteView = Backbone.View.extend({
-		el: ".note",
+		className: "note",
+		tagName: "li",
 		events: {
-			"click":"render"
+			"click .note":"render"
 		},
 		initialize: function() {
 			console.log(this.model.attributes);
+			this.render();
 		},
 		template: _.template($("#note-temp").html()),
 		render: function() {
-			console.log('hello');
+			console.log(this.model);
+			$("#notes-list").append(this.template(this.model.attributes));
 		}
 	});
 
 	window.MainView = Backbone.View.extend({
 		el: "body",
 		events: {
-			"click #addFriend":"email"
+			"click #addFriend":"email",
+			"submit #noteform": "submit"
 		},
 		template: _.template($("#note-temp").html()),
 		initialize: function () {
@@ -41,38 +45,21 @@ $(function() {
 					var notes = doc.at('notes').get();
 					for(var i in notes) {
 						that.addNote(notes[i]);
-						$("#notes-list").append(that.template(notes[i]))
 					}
+
 				}
 
 			    var notes = doc.at('notes');
+			    that.notes = notes;
+
 			    notes.on('insert', function (pos, note) {
-			    	console.log(pos, note, that.model)
 			      // move to render
+			      console.log(pos, note);
 			      that.addNote(note);
-			      $("#notes-list").append(that.template(note))
 			    });
-
-				$('#noteform').submit(function(e){
-					e.preventDefault();
-					var note = {
-						type: "note",
-						text: $("#text").val()
-					}
-					that.addNote(note);
-					notes.push(note);
-					console.log(that.model)
-
-					$("#notes-list").append(that.template(note))
-					$("#text").val("")
-
-				});
 			});
 			// keep tabs on connections
 			that.monitor(connection)
-
-
-			  
 
 		    // ???
 		   /* notes.on('child op', function (path, op) {
@@ -85,11 +72,26 @@ $(function() {
 		      }
 		    })*/
 		},
+		submit: function(e) {
+			e.preventDefault();
+			var note = {
+				type: "note",
+				text: $("#text").val()
+			}
+			note.user = fb.user;
+			note.name = fb.name;
+			note.pos = this.notes.getLength();
+			this.addNote(note);
+			this.notes.push(note);
+			console.log(this.model)
+
+			$("#text").val("")
+		},
 		addNote: function(note) {
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
       		this.model.add(newNote);
-      		
+      		$("#notes-list").scrollTop(this.model.length * 66);
 		},
 		render: function() {
 			console.log("render")
