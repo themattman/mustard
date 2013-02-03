@@ -54,7 +54,7 @@ textarea:focus {
   border-bottom: 1px #d2e6ff solid;
 }
 #notes-list {
-  max-height: 400px;
+  max-height: 550px;
   overflow: auto;
 }
 #notes {

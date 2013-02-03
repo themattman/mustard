@@ -156,7 +156,8 @@ $(function() {
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
       		this.model.add(newNote);
-      		$("#notes-list").scrollTop(this.model.length * 250);
+      		$("#notes-list").scrollTop(this.model.length * 1000);
+      		$("#notes-list").scrollTop(this.model.length * 1000);
 		},
 		render: function() {
 			$("#notes-list").empty();
