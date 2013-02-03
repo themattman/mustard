@@ -13,13 +13,17 @@ body {
   background: url("/../img/textures/otis_redding.png")
 }
 
+.center {
+  text-align: center;
+}
+
 // splash pages 
-#splash {
-  margin-top: 80px;
+.splash {
+  margin-bottom: 180px;
 }
 
 #start {
-  margin-top: 80px;
+  margin: 0px;
 }
 
 #shadow {
@@ -137,6 +141,7 @@ header:before {
 
 .note,
 .edit {
+  min-height: 65px;
   position: relative;
   margin: 0;
   width: 88%;
@@ -166,6 +171,25 @@ header:before {
   background: none;
   z-index: 2;
   box-shadow: none;
+}
+
+.delete {
+  font-size: 40px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.highlite {
+  border-left: 4px yellow solid;
+}
+
+.highlite .note {
+  padding-left: 56px;
+}
+
+
+#text {
+  width: 100%;
 }
 
 .user {

@@ -7,19 +7,44 @@ if (docId == "" || docId == "#") window.location = "/"
 $(function() {
 
 	window.NoteView = Backbone.View.extend({
-		className: "note",
-		tagName: "li",
 		events: {
-			"click .note":"render"
+			"change":"edit",
+			"click .fbPic":"fbLink",
+			"dblclick": "transform"
 		},
 		initialize: function() {
-			console.log(this.model.attributes);
+			this.listenTo(this.model, "change", this.render);
+			this.listenTo(this.model, "destroy", this.remove);
 			this.render();
 		},
 		template: _.template($("#note-temp").html()),
 		render: function() {
-			console.log(this.model);
-			$("#notes-list").append(this.template(this.model.attributes));
+			var row = this.template(this.model.attributes);
+			this.$el.html(row);
+			return this;
+		},
+		fbLink: function() {
+			window.location = "https://www.facebook.com/" + this.model.get('user');
+		},
+		transform: function() {
+			if(!$(".note", this.el).is("input")) {
+				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
+				$(".note", this.el).parent().addClass("highlite")
+			} else {
+				$(".note", this.el).replaceWith('<div class="note" ">'+$(".note", this.el).val()+'</div>')
+				$(".note", this.el).parent().removeClass("highlite")
+			}
+		},
+		edit: function(e) {
+			var newValue = $(".note", this.el).val();
+			this.model.set("text", newValue);
+			this.model.set("name", fb.name);
+			this.model.set("user", fb.user);
+
+			window.notes.at(this.model.get('pos')).remove();
+			window.notes.insert(this.model.get('pos'), this.model.attributes);
+			var data = window.notes.get();
+			console.log(data)
 		}
 	});
 
@@ -31,7 +56,10 @@ $(function() {
 		},
 		template: _.template($("#note-temp").html()),
 		initialize: function () {
-			 
+
+			this.listenTo(this.model, "add", this.render);
+			this.listenTo(this.model, "remove", this.render);
+
 			var that = this;
 			var connection = sharejs.open(docId, 'json', function(error, doc) {
 				if (error) {
@@ -41,36 +69,46 @@ $(function() {
 
 				if (doc.created) {
 					doc.set({"notes":[]});
+					$("#notes-list").empty();
 				} else {
 					var notes = doc.at('notes').get();
 					for(var i in notes) {
 						that.addNote(notes[i]);
 					}
-
 				}
 
 			    var notes = doc.at('notes');
-			    that.notes = notes;
+			    window.notes = notes;
+
 
 			    notes.on('insert', function (pos, note) {
 			      // move to render
-			      console.log(pos, note);
+			      //console.log(pos, note);
 			      that.addNote(note);
 			    });
+
+			    notes.on('delete', function (pos, note) {
+			      // move to render
+			      //console.log(pos, note);
+			      that.removeNote(pos);
+			    });
+
+			     notes.on('child op', function (path, op) {
+				  var item_idx = path[0]
+				  console.log("Item "+item_idx+" now reads "+todo.get()[item_idx])
+				  if (op.si != undefined) {
+				    // ...
+				  } else if (op.sd != undefined) {
+				    // ...
+				  }
+				})
+
 			});
 			// keep tabs on connections
 			that.monitor(connection)
 
 		    // ???
-		   /* notes.on('child op', function (path, op) {
-		      var item_idx = path[0]
-		      console.log("Item "+item_idx+" now reads "+notes.get()[item_idx])
-		      if (op.si != undefined) {
-		        // ...
-		      } else if (op.sd != undefined) {
-		        // ...
-		      }
-		    })*/
+		  
 		},
 		submit: function(e) {
 			e.preventDefault();
@@ -80,12 +118,14 @@ $(function() {
 			}
 			note.user = fb.user;
 			note.name = fb.name;
-			note.pos = this.notes.getLength();
+			note.pos = window.notes.getLength(); // get max pos ***?
 			this.addNote(note);
-			this.notes.push(note);
-			console.log(this.model)
+			window.notes.push(note);
 
 			$("#text").val("")
+		},
+		removeNote: function(pos) {
+			this.model.models[pos].destroy();
 		},
 		addNote: function(note) {
 			var newNote = new Note(note);
@@ -94,7 +134,13 @@ $(function() {
       		$("#notes-list").scrollTop(this.model.length * 66);
 		},
 		render: function() {
-			console.log("render")
+			$("#notes-list").empty();
+			console.log('rendering')
+	        for (var i = 0; i < this.model.models.length; i++) {
+	            var view = new NoteView({model: this.model.models[i]});
+	            $("#notes-list").append( view.render().el );
+	        }
+			return this;
 		},
 		monitor: function(connection) {
 			// status monitoring
