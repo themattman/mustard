@@ -16,7 +16,6 @@ exports.scrapeURL = function(url, $, cb){
       $('cite').each(function(a) {
         if(found){return;}
         for(var i = 0; i < a.children.length; i++){
-          console.log(a.children[i]);
           if(i == 0){
             if(a.children[i].data.indexOf('wikipedia.org') == -1){
               break;
@@ -32,10 +31,12 @@ exports.scrapeURL = function(url, $, cb){
         }
       });
 
+      var found_best = false;
+
       if(!found){
-        $('cite').first(function(a) {
+        $('h3').each(function(a) {
+          if(found_best){return true;}
           for(var i = 0; i < a.children.length; i++){
-            console.log(a.children[i]);
             if(i == 0){
               blob.body.url = a.children[i].data;
             }else if(a.children[i].type == 'tag'){
@@ -43,17 +44,16 @@ exports.scrapeURL = function(url, $, cb){
             }else if(a.children[i].type == 'text'){ //underscore character or something
               blob.body.url += a.children[i].data;
             }
+            if(blob.body.url.indexOf('http://') != -1){found_best = true;}
           }
         });
       }
 
-
-      if(blob.body.url.indexOf('http') == -1){
+      if(blob.body.url.indexOf('http://') == -1){
         blob.body.url = 'http://' + blob.body.url;
+      } else {
+        blob.body.url = blob.body.url.substr(blob.body.url.indexOf('http://'));
       }
-      console.log('SCRAPED URL FROM GOOGS'.magenta);
-      console.log(blob.body.url);
-
       blob.redirect = "redirect";
       router.grab(blob, cb);
       //return; //avoid continuing in this function, jump execution to the wiki scrape
