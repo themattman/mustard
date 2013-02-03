@@ -83,18 +83,26 @@ exports.scrapeURL = function(url, $, cb){
       // Sanitize relative links
       if(scraped.img_src[0] == '/' && scraped.img_src[1] == '/'){
         scraped.img_src = 'http:' + scraped.img_src;
+      } else if(scraped.img_src[0] == '/'){
+        scraped.img_src = url + scraped.img_src;
       }
+      console.log('#################'.cyan, scraped.img_src);
+      console.log(url);
     }
 
     console.log('TITITITIITITITTLLLELELELELELE'.red);
     var title_found = false;
+    console.log(typeof($('head')));
     if(typeof($('head')) == 'object'){
+      console.log('YAYAYAA');
+      //console.log($('head').children);
       $('head').children.each(function(a) {
         if(title_found){
           return;
         }
-        if(a.data == 'title'){
+        if(a.name == 'title'){
           for(var i in a.children){
+            //console.log(a.children[i]);
             if(a.children[i].data){
               scraped.title = a.children[i].data;
               found = true;
@@ -154,7 +162,8 @@ exports.run_regex = function (plaintext){
     console.log('THIS IS A LINK!!'.zebra);
 
     //Extract link
-    var exp = /(\b(HTTPS?|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;)(]*[-A-Z0-9+&@#\/%=~_|)(])/i;
+    //var exp = /(\b(HTTPS?|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;)(]*[-A-Z0-9+&@#\/%=~_|)(])/i;
+    var exp = /((https?|HTTPS?|www.)[^ ]*.[^ ]+)/gi;
     console.log(plaintext.match(exp));
     console.log('EAT IT D00D');
     if(plaintext.match(exp)){
