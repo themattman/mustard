@@ -128,6 +128,10 @@ $(function() {
 			this.addNote(note);
 			window.notes.push(note);
 
+			/*$.post('/scrape', {url: $('#text').val()}, function(response){
+		      console.log(response.img_src)
+		    });*/
+
 			$("#text").val("")
 		},
 		removeNote: function(pos) {
@@ -178,13 +182,16 @@ $(function() {
 	            console.log(link);
 	            var note = {
 					type: "pic",
-					text: "<img src='"+link+".jpeg'>"
+					text: $("#text").val(),
+					link: link+".jpeg"
 				}
 				note.user = fb.user;
 				note.name = fb.name;
 				note.pos = window.notes.getLength(); // get max pos ***?
 				that.addNote(note);
 				window.notes.push(note);
+
+				$("#text").val("")
 	        }
 
 	        xhr.send(fd);
