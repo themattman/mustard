@@ -27,7 +27,7 @@ $(function() {
 			window.location = "https://www.facebook.com/" + this.model.get('user');
 		},
 		transform: function() {
-			if(!window.fb) return;
+			if(!window.fb || this.model.get('type') == "pic") return;
 			if(!$(".note", this.el).is("input")) {
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
 				$(".note", this.el).parent().addClass("highlite")
@@ -109,7 +109,11 @@ $(function() {
 			// keep tabs on connections
 			that.monitor(connection)
 
-		    // ???
+			window.ondragover = function(e) {e.preventDefault()}
+		    window.ondrop = function(e) {e.preventDefault();}
+
+		    document.getElementById('text').ondragover = function(e) {e.preventDefault()}
+		    document.getElementById('text').ondrop = function(e) {e.preventDefault(); that.photoUpload(e.dataTransfer.files[0]); }
 		  
 		},
 		submit: function(e) {
@@ -158,6 +162,33 @@ $(function() {
 			  register('disconnected', 'important', 'Offline');
 			  register('stopped', 'important', 'Error');
 		},
+		photoUpload: function(file) {
+			// thanks to: @paulrouget <paul@mozilla.com>
+
+	        if (!file || !file.type.match(/image.*/)) return;
+	        console.log(file)
+	        var that = this;
+	        var fd = new FormData(); 
+	        fd.append("image", file); 
+	        fd.append("key", "c242fba15f62ccb0e634c5d5dda55529");
+	        var xhr = new XMLHttpRequest();
+	        xhr.open("POST", "http://api.imgur.com/2/upload.json");
+	        xhr.onload = function() {
+	            var link = JSON.parse(xhr.responseText).upload.links.imgur_page;
+	            console.log(link);
+	            var note = {
+					type: "pic",
+					text: "<img src='"+link+".jpeg'>"
+				}
+				note.user = fb.user;
+				note.name = fb.name;
+				note.pos = window.notes.getLength(); // get max pos ***?
+				that.addNote(note);
+				window.notes.push(note);
+	        }
+
+	        xhr.send(fd);
+	    },
 		email: function() {
 			// email
 		    var email = prompt('Add your friend!');
