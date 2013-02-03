@@ -141,7 +141,6 @@ $(function() {
 		      		}
 		      		console.log(note)
 		      	}
-		      	console.log(note.type)
 		      	that.addNote(note);
 				window.notes.push(note);
 		    });
