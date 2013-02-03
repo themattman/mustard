@@ -1,25 +1,17 @@
-doctype 5
-html
-  head
-    title Mustard
-    meta(charset='UTF-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
-    link(rel='stylesheet', href='/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/style.css')
-    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans:300', type='text/css')
-   
-  body
-    button.btn.btn-info#login login
-    .center#splash
-      
-      img(src='/img/mustard.jpg', width='100px')
-      h1 Mustard
-      p wake people up during a presentation
-      form.input-append#start
-        input#doc(type='text', placeholder='pick a room', autofocus)
-        button.btn.editBtn(type='submit') go
+extends layout
 
+block content
+    .container
+        
+        #title.splash
+          h1 mustard
+          p take notes with your friends
 
-  script(src='/js/jquery-1.8.3.min.js')
-  script(src="/js/fb.js")
-  script(src='/js/splash.js')
+        section#notes
+          form#start
+            input.note#doc(placeholder='pick a room, and press enter', autofocus="true", autocomplete="off")
+        .center
+          button.btn.hide#login login with facebook
+
+block script
+    script(src='/js/splash.js')
