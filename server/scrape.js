@@ -2,6 +2,8 @@ var router = require('./router.js');
 
 exports.scrapeURL = function(url, $, cb){
   console.log('URL'.yellow, url);
+
+  // Search Google
   if(url.indexOf('google.com') != -1){
     console.log('google');
     var blob = {};
@@ -55,10 +57,12 @@ exports.scrapeURL = function(url, $, cb){
     router.grab(blob, cb);
     //return; //avoid continuing in this function, jump execution to the wiki scrape
   }else{
+
+    // Non-Google result
     var imgs = [];
     if(typeof($('img')) == 'object' && $('img').length){
       $('img').each(function(a) {
-        console.log(a);
+        //console.log(a);
         if((!a.attribs.height || a.attribs.height > 15) && a.attribs.src && a.attribs.src.indexOf('.gif') == -1){
           var pic = {};
           pic.src = a.attribs.src;
@@ -82,6 +86,25 @@ exports.scrapeURL = function(url, $, cb){
       }
     }
 
+    console.log('TITITITIITITITTLLLELELELELELE'.red);
+    var title_found = false;
+    if(typeof($('head')) == 'object'){
+      $('head').children.each(function(a) {
+        if(title_found){
+          return;
+        }
+        if(a.data == 'title'){
+          for(var i in a.children){
+            if(a.children[i].data){
+              scraped.title = a.children[i].data;
+              found = true;
+              break;
+            }
+          }
+        }
+      });
+    }
+
     // Get the first line from a wiki page
     if(url.indexOf('wikipedia.org') != -1){
       var summary = $('#mw-content-text p');
@@ -94,14 +117,20 @@ exports.scrapeURL = function(url, $, cb){
             var summary_sentence = [];
             for(var j in sentence){
               if(sentence[j].type == 'tag'){
-                summary_sentence.push(sentence[j].children[0].raw);
+                if(!sentence[j].children[0].name || !sentence[j].children[0].name == "a"){
+                  console.log(sentence[j].children[0].data);
+                  console.log('-------------------'.blue);
+                  summary_sentence.push(sentence[j].children[0].data);
+                }
               }else{
-                summary_sentence.push(sentence[j].raw);
+                console.log(sentence[j].data);
+                console.log('-------------------'.blue);
+                summary_sentence.push(sentence[j].data);
               }
             }
             summary_sentence = summary_sentence.join('');
-            console.log(summary_sentence);
-            console.log(scraped);
+            //console.log(summary_sentence);
+            //console.log(scraped);
             scraped.summary = summary_sentence;
             break;
           }
@@ -116,7 +145,11 @@ exports.scrapeURL = function(url, $, cb){
 exports.run_regex = function (plaintext){
   console.log('plaintext'.green, plaintext);
   var link_pattern = /(.com|.org|.edu|.net|http:\/\/|https:\/\/)/i;
-  if(plaintext.match(link_pattern)){
+  if(plaintext.indexOf('#') == 0){
+    console.log('THIS IS A HASH SEARCH!!'.zebra);
+    console.log(plaintext.substr(1));
+    return {"engine": "google", "query": plaintext.substr(1)};
+  }else if(plaintext.match(link_pattern)){
     console.log('THIS IS A LINK!!'.zebra);
 
     //Extract link
@@ -130,10 +163,6 @@ exports.run_regex = function (plaintext){
       return {"engine": "wiki", "url": extracted_url};
     }
     return {"engine": "none"};
-  } else if(plaintext.indexOf('#') == 0){
-    console.log('THIS IS A HASH SEARCH!!'.zebra);
-    console.log(plaintext.substr(1));
-    return {"engine": "google", "query": plaintext.substr(1)};
   } else {
     return {"engine": "none"};
   }
