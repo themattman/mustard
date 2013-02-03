@@ -5,6 +5,7 @@ body {
   -ms-font-smoothing: antialiased;
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased;
+  background: url("/../img/textures/otis_redding.png");
 }
 #splash {
   margin-top: 80px;
