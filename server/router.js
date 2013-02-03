@@ -2,7 +2,8 @@ var email  = require('./email.js')
   , fs     = require('fs')
   , sha1   = require('sha1')
   , http   = require('http')
-  , nodeio = require('node.io');
+  , nodeio = require('node.io')
+  , scrape = require('./scrape');
 
 // main page
 exports.splash = function(req, res){
@@ -21,40 +22,36 @@ exports.email = function(req, res){
   });
 };
 
-exports.scrape = function(req, res){
-  var scrape = new nodeio.Job({
+exports.grab = function(req, res){
+  var scraper = new nodeio.Job({
     input: false,
-    run: function (url) {
+    run: function (scraper, url) {
       console.log('url'.green, url);
       this.getHtml(url, function(err, $) {
         if (err) {
-          this.exit(err);
           console.log(err);
+          this.exit(err);
         } else {
-          var imgs = [];
-          var cntr = 0;
-          $('img').each(function(a) {
-              if(a.attribs.height > 50 && a.attribs.src.indexOf('.gif') == -1){
-                var pic = {};
-                pic.src = a.attribs.src;
-                pic.pixels = a.attribs.height * a.attribs.width;
-                imgs.push(pic);
-                cntr++;
-              }
+          scrape.scrapeURL(url, $, function(response){
+            if(typeof(req.redirect) != 'undefined'){
+              res(response);
+            }else{
+              res.json(response);
+            }
           });
-          imgs.sort(function(a,b) {return (a.pixels > b.pixels) ? 1 : ((b.pixels > a.pixels) ? -1 : 0);} );
-          imgs.reverse();
-          imgs.splice(3);
-          for(var i in imgs){
-            delete imgs[i].pixels;
-            console.log(imgs[i]);
-          }
-          console.log('i=', cntr);
-          res.json(imgs);
         }
       });
     }
   });
-  scrape.run(req.body.url);
 
+  // Figure out where to scrape
+  var todo = scrape.run_regex(req.body.url);
+  console.log(todo);
+  if(todo.engine == "google"){
+    scraper.run(scraper, "https://www.google.com/search?q="+todo.query);
+  }else if(todo.engine != "none"){
+    scraper.run(scraper, req.body.url);
+  }else{
+    res.send('Hi :)');
+  }
 };

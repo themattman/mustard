@@ -21,5 +21,5 @@ app.get('/',          router.splash);
 app.get('/room/:id', 	router.room);
 
 
-app.post('/email',  router.email );
-app.post('/scrape', router.scrape);
+app.post('/email',  router.email);
+app.post('/scrape', router.grab );
