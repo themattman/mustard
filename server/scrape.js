@@ -4,7 +4,7 @@ exports.scrapeURL = function(url, $, cb){
   console.log('URL'.yellow, url);
 
   // Search Google
-  if(url.indexOf('google.com') != -1){
+  if(url.indexOf('google.com') != -1 && url.indexOf('/search?q=') != -1){
     console.log('google');
     var blob = {};
     blob.body = {};
@@ -60,9 +60,9 @@ exports.scrapeURL = function(url, $, cb){
 
     // Non-Google result
     var imgs = [];
+    console.log(typeof($('img')));
     if(typeof($('img')) == 'object' && $('img').length){
       $('img').each(function(a) {
-        //console.log(a);
         if((!a.attribs.height || a.attribs.height > 15) && a.attribs.src && a.attribs.src.indexOf('.gif') == -1){
           var pic = {};
           pic.src = a.attribs.src;
@@ -119,17 +119,18 @@ exports.scrapeURL = function(url, $, cb){
               if(sentence[j].type == 'tag'){
                 if(!sentence[j].children[0].name || !sentence[j].children[0].name == "a"){
                   console.log(sentence[j].children[0].data);
-                  console.log('-------------------'.blue);
+                  console.log('-------------------'.green);
                   summary_sentence.push(sentence[j].children[0].data);
                 }
               }else{
                 console.log(sentence[j].data);
+                console.log(unescape(sentence[j].data));
                 console.log('-------------------'.blue);
                 summary_sentence.push(sentence[j].data);
               }
             }
             summary_sentence = summary_sentence.join('');
-            //console.log(summary_sentence);
+            console.log(summary_sentence);
             //console.log(scraped);
             scraped.summary = summary_sentence;
             break;
@@ -153,7 +154,7 @@ exports.run_regex = function (plaintext){
     console.log('THIS IS A LINK!!'.zebra);
 
     //Extract link
-    var exp = /(\b(HTTPS?|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
+    var exp = /(\b(HTTPS?|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;)(]*[-A-Z0-9+&@#\/%=~_|)(])/i;
     console.log(plaintext.match(exp));
     console.log('EAT IT D00D');
     if(plaintext.match(exp)){
