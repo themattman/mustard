@@ -46,12 +46,13 @@ exports.grab = function(req, res){
 
   // Figure out where to scrape
   var todo = scrape.run_regex(req.body.url);
+  console.log('DECISION'.cyan);
   console.log(todo);
   if(todo.engine == "google"){
     scraper.run(scraper, "https://www.google.com/search?q="+todo.query);
   }else if(todo.engine != "none"){
     scraper.run(scraper, req.body.url);
   }else{
-    res.send('Hi :)');
+    res.send('undefined');
   }
 };

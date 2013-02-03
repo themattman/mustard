@@ -9,27 +9,31 @@ exports.scrapeURL = function(url, $, cb){
     blob.body.url = "";
 
     // Extract first result
-    $('cite').first(function(a) {
-      //if(a.type == "tag"){
-        for(var i in a.children){
-          console.log(a.children[i]);
-          if(i == 0){
-            //console.log(a.children[i].raw);
-            blob.body.url = a.children[i].data;
-          }else if(a.children[i].type == 'tag'){
-            blob.body.url += a.children[i].children[0].data;
-          }else if(a.children[i].type == 'text'){ //underscore character or something
-            blob.body.url += a.children[i].data;
+    var found = false;
+    $('cite').each(function(a) {
+      if(found){return;}
+      for(var i = 0; i < a.children.length; i++){
+        console.log(a.children[i]);
+        if(i == 0){
+          if(a.children[i].data.indexOf('wikipedia.org') == -1){
+            break;
+          }else{
+            found = true;
           }
+          blob.body.url = a.children[i].data;
+        }else if(a.children[i].type == 'tag'){
+          blob.body.url += a.children[i].children[0].data;
+        }else if(a.children[i].type == 'text'){ //underscore character or something
+          blob.body.url += a.children[i].data;
         }
-      //}
+      }
     });
 
 
     blob.body.url = 'http://' + blob.body.url;
+    console.log('SCRAPED URL FROM GOOGS'.magenta);
     console.log(blob.body.url);
 
-    //blob.body.url = "http://en.wikipedia.org/wiki/Very-large-scale_integration";
     blob.redirect = "redirect";
     router.grab(blob, cb);
     //return; //avoid continuing in this function, jump execution to the wiki scrape
@@ -51,6 +55,11 @@ exports.scrapeURL = function(url, $, cb){
       imgs.reverse();
       delete imgs[0].pixels;
       scraped.img_src = imgs[0].src;
+
+      // Sanitize relative links
+      if(scraped.img_src[0] == '/' && scraped.img_src[1] == '/'){
+        scraped.img_src = 'http:' + scraped.img_src;
+      }
     }
 
     // Get the first line from a wiki page
@@ -92,8 +101,10 @@ exports.run_regex = function (plaintext){
 
     //Extract link
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
-    var extracted_url = plaintext.match(exp)[0];
-    if(typeof(extracted_url) != 'undefined'){
+    console.log(plaintext.match(exp));
+    console.log('EAT IT D00D');
+    if(plaintext.match(exp)){
+      var extracted_url = plaintext.match(exp)[0];
       console.log('REGEX MATCH'.red);
       console.log(extracted_url);
       return {"engine": "wiki", "url": extracted_url};
@@ -103,6 +114,8 @@ exports.run_regex = function (plaintext){
     console.log('THIS IS A HASH SEARCH!!'.zebra);
     console.log(plaintext.substr(1));
     return {"engine": "google", "query": plaintext.substr(1)};
+  } else {
+    return {"engine": "none"};
   }
 
 }
