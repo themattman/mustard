@@ -7,7 +7,7 @@ module.exports = function configure(app) {
 
     var store  = new express.session.MemoryStore;
 
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.OPENSHIFT_INTERNAL_PORT || 3000);
     app.set('views', __dirname + '/../views');
     app.set('view engine', 'jade');
     app.use(express.logger('dev'));

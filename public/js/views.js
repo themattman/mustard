@@ -156,8 +156,7 @@ $(function() {
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
       		this.model.add(newNote);
-      		$("#notes-list").scrollTop(this.model.length * 1000);
-      		$("#notes-list").scrollTop(this.model.length * 1000);
+
 		},
 		render: function() {
 			$("#notes-list").empty();
@@ -165,6 +164,7 @@ $(function() {
 	            var view = new NoteView({model: this.model.models[i]});
 	            $("#notes-list").append( view.render().el );
 	        }
+	        $("#notes-list").scrollTop(this.model.length * 200);
 			return this;
 		},
 		monitor: function(connection) {
