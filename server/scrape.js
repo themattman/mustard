@@ -118,7 +118,14 @@ exports.scrapeURL = function(url, $, cb){
       if(url.indexOf('wikipedia.org') != -1){
         var summary = $('#mw-content-text p');
         if(summary){
-          summary = summary[0];
+          for(var i in summary){
+            if(summary[i].children && summary[i].children.length > 3){
+              console.log(summary[i].children.length);
+              console.log(i);
+              summary = summary[i];
+              break;
+            }
+          }
           for(var i in summary){
             if(typeof(summary[i]) == 'object'){
               console.log('YEAH'.cyan);
