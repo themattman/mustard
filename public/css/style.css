@@ -148,8 +148,12 @@ header:before {
   z-index: 2;
   box-shadow: none;
 }
-.note img {
+.caption {
+  font-size: 17px;
+}
+.text {
   max-height: 250px;
+  margin: 0 10px 0 0;
 }
 .delete {
   font-size: 40px;
