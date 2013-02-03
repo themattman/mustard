@@ -115,7 +115,7 @@ $(function() {
 			e.preventDefault();
 			var note = {
 				type: "note",
-				text: escape($("#text").val())
+				text: $("#text").val()
 			}
 			note.user = fb.user;
 			note.name = fb.name;
