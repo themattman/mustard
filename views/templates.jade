@@ -9,10 +9,12 @@ script#note-temp(type="template")
 		.note
 			<% if(type != "note") { %>
 			.row-fluid
+				<% if(link != "") { %>
 				.span3
 					img(src!="<%= link %>")
+				<% } %>
 				.span9
-					<% if(type == "search") { %>
+					<% if(type == "search" || type == "pic") { %>
 					.title <%= title %>
 					.caption
 						<%= text %>
