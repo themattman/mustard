@@ -29,8 +29,25 @@ exports.scrapeURL = function(url, $, cb){
       }
     });
 
+    if(!found){
+      $('cite').first(function(a) {
+        for(var i = 0; i < a.children.length; i++){
+          console.log(a.children[i]);
+          if(i == 0){
+            blob.body.url = a.children[i].data;
+          }else if(a.children[i].type == 'tag'){
+            blob.body.url += a.children[i].children[0].data;
+          }else if(a.children[i].type == 'text'){ //underscore character or something
+            blob.body.url += a.children[i].data;
+          }
+        }
+      });
+    }
 
-    blob.body.url = 'http://' + blob.body.url;
+
+    if(blob.body.url.indexOf('http') == -1){
+      blob.body.url = 'http://' + blob.body.url;
+    }
     console.log('SCRAPED URL FROM GOOGS'.magenta);
     console.log(blob.body.url);
 
@@ -39,17 +56,20 @@ exports.scrapeURL = function(url, $, cb){
     //return; //avoid continuing in this function, jump execution to the wiki scrape
   }else{
     var imgs = [];
-    $('img').each(function(a) {
-        if(a.attribs.height > 5 && a.attribs.src.indexOf('.gif') == -1){
+    if(typeof($('img')) == 'object' && $('img').length){
+      $('img').each(function(a) {
+        console.log(a);
+        if((!a.attribs.height || a.attribs.height > 15) && a.attribs.src && a.attribs.src.indexOf('.gif') == -1){
           var pic = {};
           pic.src = a.attribs.src;
           pic.pixels = a.attribs.height * a.attribs.width;
           imgs.push(pic);
         }
-    });
+      });
+    }
 
     var scraped = {};
-
+    console.log('img_len', imgs.length);
     if(imgs.length > 0){
       imgs.sort(function(a,b) {return (a.pixels > b.pixels) ? 1 : ((b.pixels > a.pixels) ? -1 : 0);} );
       imgs.reverse();
@@ -100,7 +120,7 @@ exports.run_regex = function (plaintext){
     console.log('THIS IS A LINK!!'.zebra);
 
     //Extract link
-    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
+    var exp = /(\b(HTTPS?|https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/i;
     console.log(plaintext.match(exp));
     console.log('EAT IT D00D');
     if(plaintext.match(exp)){

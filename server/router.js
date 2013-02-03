@@ -30,7 +30,7 @@ exports.grab = function(req, res){
       this.getHtml(url, function(err, $) {
         if (err) {
           console.log(err);
-          this.exit(err);
+          res.send('undefined');
         } else {
           scrape.scrapeURL(url, $, function(response){
             if(typeof(req.redirect) != 'undefined'){
@@ -51,7 +51,11 @@ exports.grab = function(req, res){
   if(todo.engine == "google"){
     scraper.run(scraper, "https://www.google.com/search?q="+todo.query);
   }else if(todo.engine != "none"){
-    scraper.run(scraper, req.body.url);
+    if(todo.url){
+      scraper.run(scraper, todo.url);
+    }else{
+      res.send('undefined');
+    }
   }else{
     res.send('undefined');
   }
