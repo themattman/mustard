@@ -9,7 +9,6 @@ $(function() {
 	window.NoteView = Backbone.View.extend({
 		events: {
 			"change":"edit",
-			"click .fbPic":"fbLink",
 			"dblclick": "transform"
 		},
 		initialize: function() {
@@ -23,10 +22,8 @@ $(function() {
 			this.$el.html(row);
 			return this;
 		},
-		fbLink: function() {
-			window.location = "https://www.facebook.com/" + this.model.get('user');
-		},
 		transform: function() {
+			// change for pre tags ***
 			if(!window.fb || this.model.get('type') != "note") return;
 			if(!$(".note", this.el).is("input")) {
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
@@ -82,10 +79,8 @@ $(function() {
 			    var notes = doc.at('notes');
 			    window.notes = notes;
 
-
 			    notes.on('insert', function (pos, note) {
 			      // move to render
-			      //console.log(pos, note);
 			      that.addNote(note);
 			    });
 
@@ -143,8 +138,8 @@ $(function() {
 		      		}
 		      		console.log(note)
 		      	}
-		      	that.addNote(note);
 				window.notes.push(note);
+		      	that.addNote(note);
 		    });
 
 			$("#text").val("")
@@ -153,9 +148,12 @@ $(function() {
 			this.model.models[pos].destroy();
 		},
 		addNote: function(note) {
+			note = escapeText(note);
+			console.log(note)
+
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
-      		this.model.add(newNote);
+      		this.model.add(newNote); // move to model??? ***
 
 		},
 		render: function() {
@@ -220,7 +218,16 @@ $(function() {
 		    }); 
 		}
 	});
-
-
-
 });
+
+
+function escapeText(obj) {
+
+	for (var key in obj) {
+		if(typeof obj[key] == "string") {
+			obj[key] = obj[key].replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+		}
+	}
+	obj.text = obj.text.replace("`","<pre>").replace("`","</pre>")
+	return obj;
+}

@@ -5,7 +5,8 @@ script#note-temp(type="template")
 			.delete &times;
 		.pull-right.inline.user
 			span <%= name %> 
-			img.fbPic(src!="https://graph.facebook.com/<%= user %>/picture?type=square")
+			a(href!="http://www.facebook.com/<%= user%>", target="_blank")
+				img.fbPic(src!="https://graph.facebook.com/<%= user %>/picture?type=square")
 		.note
 			<% if(type != "note") { %>
 			.row-fluid
