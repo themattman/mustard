@@ -10,6 +10,8 @@ take notes with your friends
 * check for existence of room
 * render more efficiently
 * drag and reorder
+* use dashes for indentation
+* use ! for title
 
 
 ## Matt
