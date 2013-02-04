@@ -213,7 +213,6 @@ $(function() {
 				}
 				note.user = fb.user;
 				note.name = fb.name;
-				note.pos = window.notes.getLength();
 				that.addNote(note);
 				window.notes.push(note);
 
