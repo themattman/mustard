@@ -69,17 +69,12 @@ function setUserInfo(FB, response) {
       token: response.authResponse.accessToken
   };
 
-  console.log(fb.token)
   FB.api('/me', function(response) {
-    console.log(response)
     fb.name = response.name;
     fb.user = response.username;
 
-    console.log(fb)
     $(".fbName").html(response.name);
-    //$(".fbPic").attr("src", "https://graph.facebook.com/"+response.username+"/picture");
-
-   console.log('https://graph.facebook.com/' + response.username + '/picture?type=large')
+   
    console.log('Good to see you, ' + response.name + '.');
   });
 }

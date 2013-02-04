@@ -5,7 +5,7 @@ Engaging people in presentations
 
 ## Todo
 
-* delete posts and check for existance of room
+* check for existance of room
 * jQuery highlight or visual effect when a new post comes in
 * decide on a logo
 * Work in the web img scraper (regex for http or www or .com, .net, .org, .edu)

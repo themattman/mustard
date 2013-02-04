@@ -10,7 +10,9 @@ $(function() {
 		events: {
 			"change":"edit",
 			"dblclick": "transform",
-			"click .delete": "delete"
+			"click .delete": "delete",
+			"mouseenter":"showEdit",
+			"mouseleave":"hideEdit"
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
@@ -27,11 +29,9 @@ $(function() {
 			// change for pre tags ***
 			if(!window.fb || this.model.get('type') != "note") return;
 			if(!$(".note", this.el).is("input")) {
-				$(".delete", this.el).show()
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
 				$(".note", this.el).parent().addClass("highlite")
 			} else {
-				$(".hide", this.el).hide()
 				$(".note", this.el).replaceWith('<div class="note">'+$(".note", this.el).val()+'</div>')
 				$(".note", this.el).parent().removeClass("highlite")
 			}
@@ -41,15 +41,22 @@ $(function() {
 			this.model.set("text", newValue);
 			this.model.set("name", fb.name);
 			this.model.set("user", fb.user);
-
-			window.notes.at(this.model.get('pos')).remove();
-			window.notes.insert(this.model.get('pos'), this.model.attributes);
+			var pos = this.model.collection.indexOf(this.model);
+			window.notes.at(pos).remove();
+			window.notes.insert(pos, this.model.attributes);
 			var data = window.notes.get();
 			console.log(data)
 		},
 		delete: function() {
-			console.log(this.model.destroy())
-			window.notes.at(this.model.get('pos')).remove()
+			var pos = this.model.collection.indexOf(this.model);
+			this.model.destroy();
+			window.notes.at(pos).remove();
+		},
+		showEdit: function() {
+			$(".hide", this.el).show()
+		},
+		hideEdit: function() {
+			$(".hide", this.el).hide()
 		}
 	});
 
@@ -126,8 +133,7 @@ $(function() {
 			}
 			note.user = fb.user;
 			note.name = fb.name;
-			note.pos = window.notes.getLength(); // get max pos ***?
-
+			
 			var that = this;
 			$.post('/scrape', {url: $('#text').val()}, function(response){
 				if(response != "undefined") {
@@ -156,7 +162,6 @@ $(function() {
 		},
 		addNote: function(note) {
 			note = escapeText(note);
-			console.log(note)
 
 			var newNote = new Note(note);
 			new NoteView({model: newNote});
@@ -208,7 +213,7 @@ $(function() {
 				}
 				note.user = fb.user;
 				note.name = fb.name;
-				note.pos = window.notes.getLength(); // get max pos ***?
+				note.pos = window.notes.getLength();
 				that.addNote(note);
 				window.notes.push(note);
 
@@ -232,7 +237,6 @@ function escapeText(obj) {
 
 	for (var key in obj) {
 		if(typeof obj[key] == "string") {
-			console.log(key)
 			obj[key] = obj[key].replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 		}
 		if(key == "text")
