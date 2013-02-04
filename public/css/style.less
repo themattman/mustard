@@ -142,12 +142,11 @@ header:before {
   border-bottom: 1px solid @lines;
 }
 
-.note,
-.edit {
+.note {
   min-height: 65px;
   position: relative;
   margin: 0;
-  width: 88%;
+  width: 80%;
   font-size: 24px;
   font-family: inherit;
   line-height: 1.4em;
@@ -155,7 +154,11 @@ header:before {
   outline: none;
   color: inherit;
   padding: 6px;
-  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px 16px 16px 20px;
+  margin-left: 40px;
+  background: none;
+  z-index: 2;
+  box-shadow: none;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -ms-box-sizing: border-box;
@@ -166,13 +169,6 @@ header:before {
   -ms-font-smoothing: antialiased;
   -o-font-smoothing: antialiased;
   font-smoothing: antialiased;
-}
-
-.note {
-  padding: 16px 16px 16px 60px;
-  background: none;
-  z-index: 2;
-  box-shadow: none;
 }
 
 .caption {
@@ -195,18 +191,20 @@ header:before {
 }
 
 .highlite .note {
-  padding-left: 56px;
+  padding-left: 16px;
 }
-
 
 #text {
   width: 100%;
+  margin-left: 0px;
+  padding-left: 60px;
 }
 
 .user {
   height: 45px;
   margin-bottom: -65px;
   padding: 10px;
+  cursor: pointer;
 }
 
 .user img {

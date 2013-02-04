@@ -9,7 +9,8 @@ $(function() {
 	window.NoteView = Backbone.View.extend({
 		events: {
 			"change":"edit",
-			"dblclick": "transform"
+			"dblclick": "transform",
+			"click .delete": "delete"
 		},
 		initialize: function() {
 			this.listenTo(this.model, "change", this.render);
@@ -26,9 +27,11 @@ $(function() {
 			// change for pre tags ***
 			if(!window.fb || this.model.get('type') != "note") return;
 			if(!$(".note", this.el).is("input")) {
+				$(".delete", this.el).show()
 				$(".note", this.el).replaceWith('<input class="note" value="'+$(".note", this.el).html()+'", autofocus="true", autocomplete="off">')
 				$(".note", this.el).parent().addClass("highlite")
 			} else {
+				$(".hide", this.el).hide()
 				$(".note", this.el).replaceWith('<div class="note">'+$(".note", this.el).val()+'</div>')
 				$(".note", this.el).parent().removeClass("highlite")
 			}
@@ -43,6 +46,10 @@ $(function() {
 			window.notes.insert(this.model.get('pos'), this.model.attributes);
 			var data = window.notes.get();
 			console.log(data)
+		},
+		delete: function() {
+			console.log(this.model.destroy())
+			window.notes.at(this.model.get('pos')).remove()
 		}
 	});
 
@@ -225,9 +232,11 @@ function escapeText(obj) {
 
 	for (var key in obj) {
 		if(typeof obj[key] == "string") {
+			console.log(key)
 			obj[key] = obj[key].replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 		}
+		if(key == "text")
+			obj.text = obj.text.replace("`","<pre>").replace("`","</pre>")
 	}
-	obj.text = obj.text.replace("`","<pre>").replace("`","</pre>")
 	return obj;
 }
