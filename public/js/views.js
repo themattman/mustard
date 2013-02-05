@@ -186,10 +186,10 @@ $(function() {
 			      status.html(text);
 			    });
 			  };
-			  register('ok', 'success', 'Online');
-			  register('connecting', 'warning', 'Connecting...');
-			  register('disconnected', 'important', 'Offline');
-			  register('stopped', 'important', 'Error');
+			  register('ok', 'success', 'online');
+			  register('connecting', 'warning', 'connecting...');
+			  register('disconnected', 'important', 'offline');
+			  register('stopped', 'important', 'error');
 		},
 		photoUpload: function(file) {
 			// thanks to: @paulrouget <paul@mozilla.com>
@@ -238,8 +238,14 @@ function escapeText(obj) {
 		if(typeof obj[key] == "string") {
 			obj[key] = obj[key].replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 		}
-		if(key == "text")
+		if(key == "text" && obj.type == "note") {
 			obj.text = obj.text.replace("`","<pre>").replace("`","</pre>")
+			if(obj.text.indexOf("!") == 0)
+				obj.text = obj.text.replace("!","<strong>") + "</strong>";
+			if(obj.text.indexOf("*") == 0)
+				obj.text = obj.text.replace("*","<li>") + "</li>"
+		}
+
 	}
 	return obj;
 }
