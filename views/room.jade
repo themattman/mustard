@@ -8,7 +8,7 @@ block append content
 		section#notes
 			header: h2#topic= topic
 			#notes-list
-				li.center: h2 loading ... 
+				.line.center: h2 loading ... 
 			
 			form#noteform
 				input.note#text(placeholder='Add a new note', autofocus="", autocomplete="off")
@@ -20,7 +20,7 @@ block append content
 				#status.label
 
 		.center
-			p # wiki | drop photos | paste links | `code` | * bullet | ! topic
+			p drop photos | # wiki | paste links | double click edit |  `code` | ! topic | * bullet
 			p built by otto and matt in ann arbor
 		#fb-root
 
