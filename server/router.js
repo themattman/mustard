@@ -33,6 +33,7 @@ exports.grab = function(req, res){
         this.getHtml(url, function(err, $) {
           if (err) {
             console.log(err);
+            if(!res.send){throw "res.send not defined";}
             res.send('undefined');
           } else {
             scrape.scrapeURL(url, $, function(response){
