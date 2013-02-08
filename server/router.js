@@ -3,7 +3,9 @@ var email  = require('./email.js')
   , sha1   = require('sha1')
   , http   = require('http')
   , nodeio = require('node.io')
-  , scrape = require('./scrape');
+  , scrape = require('./scrape')
+  , wiki    = require('wikifetch')
+;
 
 // main page
 exports.splash = function(req, res){
@@ -22,50 +24,22 @@ exports.email = function(req, res){
   });
 };
 
-var url_to_return = "";
 exports.grab = function(req, res){
   try{
-    var scraper = new nodeio.Job({
-      input: false,
-      run: function (scraper, url) {
-        console.log('url'.green, url);
-        url_to_return = url;
-        this.getHtml(url, function(err, $) {
-          if (err) {
-            console.log(err);
-            if(!res.send){throw "res.send not defined";}
-            res.send('undefined');
-          } else {
-            scrape.scrapeURL(url, $, function(response){
-              if(typeof(req.redirect) != 'undefined'){
-                res(response);
-              }else{
-                response.url = url_to_return;
-                res.json(response);
-              }
-            });
-          }
-        });
-      }
-    });
-
-    // Figure out where to scrape
-    var todo = scrape.run_regex(req.body.url);
-    console.log('DECISION'.cyan);
-    console.log(todo);
-    if(todo.engine == "google"){
-      scraper.run(scraper, "https://www.google.com/search?q="+todo.query);
-    }else if(todo.engine != "none"){
-      if(todo.url){
-        scraper.run(scraper, todo.url);
-      }else{
-        res.send('undefined');
-      }
+    console.log(req.body);
+    if(req.body.url[0] === '#'){
+      var searchTerm = req.body.url.substr(1,req.body.url.length-1);
+      var wikiScraper = new wiki.WikiFetch();
+      wikiScraper.loadArticle(searchTerm, function(err, result){
+        console.log(result);
+        res.json(result);
+      });
     }else{
       res.send('undefined');
     }
-  } catch(err){
-    //console.log(err);
+  }catch(e){
+    console.log('error caught.', e);
+    if(!res.send){console.log('can\'t response');}
     res.send('undefined');
   }
 };

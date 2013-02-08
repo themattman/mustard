@@ -136,24 +136,31 @@ $(function() {
 			
 			var that = this;
 			$.post('/scrape', {url: $('#text').val()}, function(response){
+				// I will give you a list of stuffs if there is disambiguation
+				// You need to display a bunch of links for them to pick through
+				// Try #blah to see what you get from the backend
 				if(response != "undefined") {
-		      		console.log(response)
-		      		note.title = response.title;
-		      		note.link = response.img_src;
-		      		note.url = response.url;
-		      		if(response.summary != undefined) {
-
-		      			note.type = "search";
-		      			note.text = response.summary;
-		      		} else {
-		      			note.type = "link";
-		      			note.text = "";
-		      		}
-		      		console.log(note)
-		      	}
+      		console.log(response)
+      		note.title = response.title;
+      		note.link = response.img_src;
+      		note.url = response.url;
+      		if(response.summary != undefined) {
+      			note.type = "search";
+      			note.text = response.summary;
+      		} else {
+      			note.type = "link";
+      			note.text = "";
+      		}
+      		console.log(note)
+      	}
 				window.notes.push(note);
 		      	that.addNote(note);
 		    });
+
+			// SCROLL THE NOTES DIV DOWN!
+			var n = -1*$('#notes').height();
+			console.log('n', n);
+			$('#notes').animate({ scrollTop: n },'50');
 
 			$("#text").val("")
 		},
